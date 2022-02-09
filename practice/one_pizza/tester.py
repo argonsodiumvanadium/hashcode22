@@ -10,17 +10,19 @@ def get_pizza(filename):
 def compare_pizza(pizza, fname):
     with open(fname) as f:
         likes = f.read().split('\n')[1::2]
+        dislikes = f.read().split('\n')[::2][1:]
 
-        return compare_likes(pizza,likes)
+        return compare_likes(pizza,likes,dislikes)
 
-def compare_likes (pizza, likes):
+def compare_likes (pizza, likes,dislikes):
     counter = 0
     pizzaset = set(pizza['ingredients'])
 
-    for like in likes:
+    for like,dislike in zip(likes,dislikes):
         likeset = set(like.split(' ')[1:])
+        dislikeset = set(dislike.split(' ')[1:])
 
-        if len(likeset & pizzaset) != 0:
+        if len(likeset & pizzaset) != 0 and len(dislikeset & pizzaset) == 0:
             counter += 1
 
     return counter
